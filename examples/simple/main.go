@@ -23,7 +23,7 @@ func main() {
 	task1 := gogent.NewTask().
 		WithLLM(gpt35).
 		WithGopher(jokesWriter).
-		WithCreativity(gogent.SlightlyCreative).
+		WithCreativity(gogent.ExtremelyCreative).
 		WithDescription("Write 10 jokes").
 		WithExpectedOutput(`All jokes must be returned in a single valid JSON array like: ["joke1", "joke2", "joke3", ...]`)
 
