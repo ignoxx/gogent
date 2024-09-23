@@ -38,14 +38,14 @@ func (c *Client) WithUserPrompt(prompt string) clients.AIClient {
 	return c
 }
 
-func (c *Client) Run(ctx context.Context) (clients.AIClientResponse, error) {
+func (c *Client) Run(ctx context.Context, model string) (clients.AIClientResponse, error) {
 	messages := []openai.ChatCompletionMessage{
 		{Role: openai.ChatMessageRoleSystem, Content: c.SystemPrompt},
 		{Role: openai.ChatMessageRoleUser, Content: c.UserPrompt},
 	}
 
 	resp, err := c.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
-		Model:       openai.GPT3Dot5Turbo0613,
+		Model:       model,
 		Temperature: c.Temperature,
 		Messages:    messages,
 	})

@@ -129,7 +129,7 @@ func (t *Task) Process(ctx context.Context) error {
 	client.WithUserPrompt(t.userPrompt())
 	client.WithTemperature(t.Creativity)
 
-	resp, err := client.Run(ctx)
+	resp, err := client.Run(ctx, string(t.LLM.model))
 	if err != nil {
 		return err
 	}
