@@ -109,20 +109,20 @@ func (t *Task) OutputToJSONStruct(out any) error {
 func (t *Task) Process(ctx context.Context) error {
 
 	if len(t.Dependencies) > 0 {
-		slog.Info("Processing Task dependencies first", slog.Int("amount", len(t.Dependencies)), slog.String("description", t.Description))
+		slog.Info("Processing Task dependencies first", slog.Int("amount", len(t.Dependencies)))
 		for _, dep := range t.Dependencies {
 			if !dep.IsDone() {
-				slog.Info("Processing dependency", slog.String("description", dep.Description))
+				slog.Info("Processing dependency", slog.String("role", dep.Gopher.Role))
 				err := dep.Process(ctx)
 				if err != nil {
 					return err
 				}
-				slog.Info("Dependency processed", slog.String("description", dep.Description))
+				slog.Info("Dependency processed")
 			}
 		}
 	}
 
-	slog.Info("Processing Task", slog.String("description", t.Description))
+	slog.Info("Processing Task", slog.String("gopher", t.Gopher.Role))
 
 	client := t.LLM.Client()
 	client.WithSystemPrompt(t.systemPrompt())
@@ -148,7 +148,7 @@ func (t *Task) systemPrompt() string {
 	sb.WriteString("Your role is '" + t.Gopher.Role + "'\n")
 	sb.WriteString("With the goal: '" + t.Gopher.Goal + "'\n")
 	sb.WriteString("Your Backstory: '" + t.Gopher.Backstory + "'\n")
-	sb.WriteString("This is your expected way to respond, you MUST ONLY respond with this and NOTHING else!!:\n")
+	sb.WriteString("This is your expected way to respond, you MUST ONLY respond with this and NOTHING else!! (ignore the '''):\n")
 	sb.WriteString("'''\n")
 	sb.WriteString(t.ExpectedOutput + "\n")
 	sb.WriteString("'''\n")
